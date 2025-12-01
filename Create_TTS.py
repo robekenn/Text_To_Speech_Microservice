@@ -27,14 +27,9 @@ def text_to_wav(text, wav_filename="output.wav"):
     os.remove(temp_file)
 
     print(f"WAV file created: {wav_filename}")
-    return wav_filename
+    return "OK"
 
 
+def create(message):
+    return text_to_wav(message, "output.wav")
 
-
-if __name__ == "__main__":
-    # Text you want spoken
-    text = message[1]
-
-    # Convert text → WAV
-    wav_file = text_to_wav(text, "output.wav")

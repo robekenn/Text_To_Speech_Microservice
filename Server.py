@@ -1,9 +1,9 @@
 import zmq
 import json
-
-def JSONDump(data):
-    with open("data.json", 'w') as f:
-        json.dump(data, f, indent=4)
+import Create_TTS
+import Play_TTS
+import Delete_TTS
+import time
 
 def init_server():
     #initilises the socket
@@ -12,15 +12,8 @@ def init_server():
     socket.bind("tcp://*:5554")
     return socket
 
-def JSONLoad():
-    #read JSON Database's data
-    with open('data.json', 'r') as file:
-            return json.load(file)
-
-
 def main():
     socket = init_server()
-    data = JSONLoad()
     while True:
         #  Wait for next request from client
         message = socket.recv()
@@ -30,17 +23,23 @@ def main():
         print(message)
 
         if message[0] == 1:
-            # Get User Points
-            print("Get User Points")
-            retMessage = Create_TTS.create()
+            # Create audio
+            print("Create Audio")
+            retMessage = Create_TTS.create(message[1])
             socket.send_string(str(retMessage))
-            JSONDump(data)
+            time.sleep(.5)
         elif message[0] == 2:
-            #Add Points
-            print("Add Points")
+            #Play Sound
+            print("Play Sound")
+            retMessage = Play_TTS.play_wav()
+            socket.send_string(str(retMessage))
+            time.sleep(.5)
+        elif message[0] == 3:
+            #Delete Sound
+            print("Delete Sound")
             retMessage = Delete_TTS.delete()
             socket.send_string(str(retMessage))
-            JSONDump(data)
+            time.sleep(.5)
 
 if __name__ == "__main__":
     main()

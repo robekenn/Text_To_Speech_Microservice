@@ -1,19 +1,15 @@
 import os
-import wave
-import pygame
 
-print("File exists:", os.path.exists("output.wav"))
+def delete(filename="output.wav"):
+    """
+    Delete the generated WAV file safely.
+    Returns 'OK' if deleted, otherwise an error message.
+    """
+    if not os.path.exists(filename):
+        return "File not found"
 
-try:
-    w = wave.open("output.wav")
-    print("WAV params:", w.getparams())
-except Exception as e:
-    print("WAV open error:", e)
-
-try:
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound("output.wav")
-    sound.play()
-    print("Pygame successfully loaded the sound!")
-except Exception as e:
-    print("Pygame error:", e)
+    try:
+        os.remove(filename)
+        return "OK"
+    except Exception as e:
+        return f"Error: {str(e)}"
